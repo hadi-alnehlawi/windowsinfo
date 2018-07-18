@@ -10,16 +10,17 @@ using System.Diagnostics;
 using System.Timers;
 using Microsoft.Web.Administration;
 
-namespace IA_Run
+namespace WindowsInfo
 {
     public static class Systeminfo
     {
+        public static int intendSpace = 30;
         public static string OS_Name
         {
             get
             {
-                Console.Write("Get OS Name....");
-                Console.WriteLine("Ok");
+                Console.Write("OS Name: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("OS Name: ").Length)));
                 var name = (from x in new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem").Get().Cast<ManagementObject>()
                                    select x.GetPropertyValue("Caption")).FirstOrDefault();
                 return name != null ? name.ToString() : "Unknown";
@@ -34,7 +35,8 @@ namespace IA_Run
             get
             {
                 string result = "";
-                Console.Write("Calculating Free Space OS Drive...");
+                Console.Write("Free Space OS Drive: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("Free Space OS Drive: ").Length)));
                 string SystemDrive = "";
 
                 //Get SystemDrive
@@ -63,72 +65,18 @@ namespace IA_Run
                         }
                     }
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return result;
             }
             set
             {
             }
         }
-        public static string Free_Space_RMG_Drive
-        {
-            get
-            {
-                Console.Write("Calculating Free Space RMG Drive...");
-                string rmgDrive = null;
-                string result = "";
-                string key = "Win32_OperatingSystem";
-                try
-                {
-                  // get where RMG is install [rmgDrive=], it could D: or C: ...etc
-                    ServerManager mgr = new ServerManager();
-                    foreach (Site site in mgr.Sites)
-                    {
-                        if (site.Name == "Symon Web Services")
-                        {
-                            //Console.WriteLine("Site {0}", site.Name);
-                            foreach (Application app in site.Applications)
-                            {
-                                if (app.Path == @"/")
-                                {
-                                    rmgDrive = (app.VirtualDirectories[0].PhysicalPath).Substring(0, 2);
-                                }
-                            }
-                        }
-                    }
-
-                    // Do Calculate Free Size 
-                    key = "Win32_logicaldisk";
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from " + key);
-                    foreach (ManagementObject share in searcher.Get())
-                    {
-                        if (share["Caption"].ToString() == rmgDrive)
-                        {
-                            foreach (var prop in share.Properties)
-                            {
-                                if (prop.Name == "FreeSpace")
-                                {
-                                    result = Math.Round(((Convert.ToDouble(prop.Value)) / 1024 / 1024 / 1024), 2).ToString() + " GB";
-                                }
-                            }
-                        }
-                    }
-
-                }
-                catch (Exception)
-                {
-                    result = @"Error: This is not RMG Server";
-                }
-                Console.WriteLine("Ok");
-                return result;
-            }
-            set { }
-        }
         public static string Disk_Write_Time
         {
             get
             {
-                string result = "";
+                string result = String.Concat(Enumerable.Repeat(" ", 52 - ("Disk [C:] Write Time: ").Length));
                 string key = "Win32_logicaldisk";
                 List<string> DeviceIDs = new List<string>();
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from " + key);
@@ -152,9 +100,9 @@ namespace IA_Run
                         {
                             PerformanceCounter pc1 = new PerformanceCounter("PhysicalDisk", "% Disk Write Time", instance);
                             pc1.NextValue();
-                            Console.Write("Calcualting Disk " + deviceid + " Write Time....");
+                            Console.WriteLine("Disk [" + deviceid + "] Write Time: ");
                             System.Threading.Thread.Sleep(2000);
-                            Console.WriteLine("Ok");
+                            //Console.WriteLine("Ok");
                             result += "(" + deviceid + " " + Math.Round(pc1.NextValue(), 2).ToString() + "% )";
                         }
                     }
@@ -168,7 +116,8 @@ namespace IA_Run
         {
             get
             {
-                Console.Write("Get Windows Processes....");
+                Console.Write("Processes: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("Processes: ").Length)));
                 string result = "";
                 string key = "Win32_Processor";
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from " + key);
@@ -182,7 +131,7 @@ namespace IA_Run
                         }
                     }
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return result;
             }
             set { }
@@ -191,12 +140,17 @@ namespace IA_Run
         {
             get
             {
+                string result = "";
                 PerformanceCounter pc1 = new PerformanceCounter("Processor", "% Processor Time", "_Total");
                 pc1.NextValue();
-                Console.Write("Calculating CPU Utalization....");
+                Console.Write("CPU Utalization: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("CPU Utalization: ").Length)));
                 System.Threading.Thread.Sleep(2000);
-                Console.WriteLine("Ok");
-                return (Math.Round(pc1.NextValue(), 0)).ToString() + " %";
+                //Console.WriteLine("Ok");
+                result = (Math.Round(pc1.NextValue(), 0)).ToString() + " %";
+                return result;
+                
+               
             }
             set { }
         }
@@ -204,7 +158,8 @@ namespace IA_Run
         {
             get
             {
-                Console.Write("Get Number Of CPU Cores....");
+                Console.Write("No Of CPU Cores: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("No Of CPU Cores: ").Length)));
                 string result = "";
                 string key = "Win32_Processor";
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from " + key);
@@ -218,7 +173,7 @@ namespace IA_Run
                         }
                     }
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return result;
             }
             set { }
@@ -227,7 +182,8 @@ namespace IA_Run
         {
             get
             {
-                Console.Write("Get Number Of Logical Processors....");
+                Console.Write("No of Logical Processors: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("No of Logical Processors: ").Length)));
                 string result = "";
                 string key = "Win32_Processor";
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from " + key);
@@ -241,7 +197,7 @@ namespace IA_Run
                         }
                     }
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return result;
             }
             set
@@ -253,7 +209,8 @@ namespace IA_Run
         {
             get
             {
-                Console.Write("Calculating Total Physical Memory....");
+                Console.Write("Total Physical Memory :");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("Total Physical Memory :").Length)));
                 string key = "Win32_PhysicalMemory";
                 long returnValue = 0;
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from " + key);
@@ -268,7 +225,7 @@ namespace IA_Run
                         }
                     }
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return returnValue.ToString() + " GB";
             }
             set { }
@@ -278,11 +235,12 @@ namespace IA_Run
 
            get
             {
-                Console.Write("Calculating Avaialble Physical Memory....");
+                Console.Write("Avaialble Physical Memory:");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("Avaialble Physical Memory:").Length)));
                 PerformanceCounter pc = new PerformanceCounter("Memory", "Available MBytes");
                 //, "% Committed Bytes In Use");
                 //,"System Cache Resident Bytes"); //, "Available MBytes");
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return (Math.Round((pc.NextValue() / 1024), 2)).ToString() + " GB";
             }
             set { }
@@ -291,7 +249,8 @@ namespace IA_Run
         {
             get
             {
-                Console.Write("Calculating Cache Memory....");
+                Console.Write("Cache Memory:");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("Cache Memory:").Length)));
                 string result = "";
                 string key = "Win32_PerfFormattedData_PerfOS_Memory";
                 List<string> DeviceIDs = new List<string>();
@@ -304,7 +263,7 @@ namespace IA_Run
                             result += Math.Round(((Convert.ToDouble(prop.Value)) / 1024 / 1024), 2).ToString() + " MB";
                     }
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return result;
             }
             set { }
@@ -313,10 +272,11 @@ namespace IA_Run
         {
             get
             {
-                Console.Write("Get Processes....");
+                Console.Write("No of Windows Processes: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("No of Windows Processes: ").Length)));
                 PerformanceCounterCategory cat = new PerformanceCounterCategory("Process");
                 string[] instances = cat.GetInstanceNames();
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return instances.Length.ToString();
 
             }
@@ -329,7 +289,8 @@ namespace IA_Run
         {
             get
             {
-                Console.Write("Calculating Handeles....");
+                Console.Write("No of Handles:");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("No of Handles:").Length)));
                 int result = 0;
                 string key = "Win32_Process";
                 List<string> DeviceIDs = new List<string>();
@@ -346,7 +307,8 @@ namespace IA_Run
                         }
                     }
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
+
                 return result.ToString();
             }
             set { }
@@ -354,7 +316,8 @@ namespace IA_Run
         public static string Threads
         {
             get {
-                Console.Write("Calculating Threads...");
+                Console.Write("No of Threads: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("No of Threads: ".Length))));
                 int result = 0;
                 string key = "Win32_Process";
                 List<string> DeviceIDs = new List<string>();
@@ -371,7 +334,7 @@ namespace IA_Run
                         }
                     }
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return result.ToString();
             }
             set { }
@@ -410,7 +373,8 @@ namespace IA_Run
         {
             get
             {
-                Console.Write("Calculating Free Physical Memory...");
+                Console.Write("Free Physical Memory: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("Free Physical Memory: ").Length)));
                 Double result = 0.0 ;
                 string key = "Win32_PerfRawData_PerfOS_Memory";
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from " + key);
@@ -420,7 +384,7 @@ namespace IA_Run
                     result = Convert.ToDouble(share["FreeAndZeroPageListBytes"]) / 1024 / 1024;
                     result = Math.Round(result, 0);
                 }
-                Console.WriteLine("Ok");
+                //Console.WriteLine("Ok");
                 return result.ToString() + " MB";
             }
             set { }
