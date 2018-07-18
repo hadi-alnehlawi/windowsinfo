@@ -4,7 +4,7 @@ This is a simple console app to show the windows operating system information su
 # How To Use
 
 browse to the directory 
-```C:\Users\hadi\Desktop\WindowsInfo\WindowsInfo\bin\Debug```
+```\\Folder-Directory\WindowsInfo\WindowsInfo\bin\Debug```
 and run ```WindowsInfo.exe```
 
 # Contribution
