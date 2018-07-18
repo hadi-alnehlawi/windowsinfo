@@ -1,6 +1,10 @@
 # windowsinfo
 Console application to show Windows OS info
 This is a simple console app to show the windows operating system information such as CPU , Disk Size...etc
+
+# Installation
+No previous installation is required, this is excutable exe file. only need to have Dot Net Framework > 4.5
+
 # How To Use
 browse to the directory 
 ```\\Folder-Directory\WindowsInfo\WindowsInfo\bin\Debug```
