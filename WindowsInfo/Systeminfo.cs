@@ -389,6 +389,33 @@ namespace WindowsInfo
             }
             set { }
         }
+        public static string Number_Of_Processor_Sockets     
+            {
+            get {
+                string result = "0";
+                Console.Write("Get Number Of CPU Sockets: ");
+                Console.Write(String.Concat(Enumerable.Repeat(" ", intendSpace - ("Get Number Of CPU Sockets: ").Length)));
+                string query;
+                ManagementObjectSearcher searcher;
+
+                // Get the number of physical processors.
+                int num_physical_processors = 0;
+                query = "SELECT * FROM Win32_ComputerSystem";
+                searcher = new ManagementObjectSearcher(query);
+                foreach (var sys in searcher.Get())
+                {
+                    num_physical_processors =
+                    num_physical_processors =
+                        int.Parse(sys["NumberOfProcessors"].ToString());
+                }
+                result = Convert.ToString(num_physical_processors);
+                
+                return result.ToString(); 
+                }
+            set {}
+            
+            }
+
         public static string getValue
         {
             //PerformanceCounterCategory cat = new PerformanceCounterCategory("Process");
@@ -422,6 +449,7 @@ namespace WindowsInfo
 
 
         }
+
 
     }
 }

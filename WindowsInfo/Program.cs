@@ -91,6 +91,8 @@ namespace WindowsInfo
                 Console.WriteLine();
                 Console.WriteLine(Systeminfo.Number_Of_Logical_Processors);
                 Console.WriteLine();
+                Console.WriteLine(Systeminfo.Number_Of_Processor_Sockets);
+                Console.WriteLine();
                 Console.WriteLine(Systeminfo.Processor_Usage);
                 Console.WriteLine();
                 Console.WriteLine(Systeminfo.OS_Name);
@@ -114,8 +116,6 @@ namespace WindowsInfo
                 Console.WriteLine(Systeminfo.Free_Physical_Memory);
                 Console.WriteLine();
                 
-
-
 
             }
 
