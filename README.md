@@ -1,4 +1,4 @@
-# windowsinfo
+# Windowsinfo
 Console application to show Windows OS info
 This is a simple console app to show the windows operating system information such as CPU , Disk Size...etc
 
@@ -15,6 +15,7 @@ and run ```WindowsInfo.exe```
 Processor:
 No Of CPU Cores:
 No of Logical Processors:
+No Of processor Socketw:
 OS Name:
 Free Space OS Drive:
 Disk Write Time:
@@ -25,6 +26,7 @@ Total Physical Memory:
 Avaialble Physical Memory:
 Cache Memory:
 Free Physical Memory:
+
 ```
 
 # Contribution
